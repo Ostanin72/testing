@@ -58,9 +58,28 @@ def test_create_folder_with_invalid_token():
 
 # Тест на успешное создание новой папки
 def test_create_folder_success(headers, temp_folder):
-    response = requests.put(BASE_URL, headers=headers, params={'path': f'disk:/{temp_folder}'})
-    assert response.status_code in [201, 409]
+    response = requests.put(
+        BASE_URL,
+        headers=headers,
+        params={'path': f'disk:/{temp_folder}'}
+    )
 
+    # Проверка, что папка действительно появилась в списке ресурсов
+    check_response = requests.get(
+        BASE_URL,
+        headers=headers,
+        params={
+            "path": "/"
+        }
+    )
+
+    folders_list = check_response.json()['_embedded']['items']
+    folder_names = [item['name'] for item in folders_list]
+
+    assert check_response.status_code == 200
+
+    # Основная проверка: папка должна быть в списке
+    assert temp_folder in folder_names
 
 # Тест на попытку создать существующую папку
 def test_create_existing_folder(headers, create_and_cleanup_folder):
