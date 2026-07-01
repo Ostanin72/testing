@@ -39,6 +39,7 @@ FAILED_LOGIN = {
     "expected_result": "неуспешный"
 }
 
+
 # --- Сам тест ---
 @pytest.mark.parametrize("login_data", [SUCCESSFUL_LOGIN, FAILED_LOGIN])
 def test_yandex_authorization(browser, login_data):

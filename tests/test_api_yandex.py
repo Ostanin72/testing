@@ -64,12 +64,14 @@ def test_create_folder_success(headers, temp_folder):
         params={'path': f'disk:/{temp_folder}'}
     )
 
+    assert response.status_code in (200, 201)
+
     # Проверка, что папка действительно появилась в списке ресурсов
     check_response = requests.get(
         BASE_URL,
         headers=headers,
         params={
-            "path": "/"
+            "path": "disk:/"
         }
     )
 
